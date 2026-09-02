@@ -1,0 +1,106 @@
+---
+title: "TP1"
+format: html
+---
+
+# Partie 2
+
+```{r}
+set.seed(0)
+x <- rnorm(1000, mean = 0, sd = 1)
+U <- runif(1000, 0, 1)
+x2 <- rnorm(200, mean = 0, sd = 1)
+U2 <- runif(200, 0, 1)
+#but du 2eme sample = faire des test de precision de notre fonction de repartition
+```
+
+```{r}
+Ytrain <- c(0)
+for (i in 1:1000) {
+  if (x[i] <= 0) {
+    if (U[i] <= 0.2) {
+      Ytrain[i] <- 1
+    }
+    else {
+      Ytrain[i] <- 0
+    }
+  }
+  else {
+    if (U[i] > 0.4) {
+      Ytrain[i] <- 1
+    }
+    else {
+      Ytrain[i] <- 0
+    }
+  }
+}
+
+Yeval <- c(0)
+for (i in 1:200) {
+  if (x2[i] <= 0) {
+    if (U2[i] <= 0.2) {
+      Yeval[i] <- 1
+    }
+    else {
+      Yeval[i] <- 0
+    }
+  }
+  else {
+    if (U2[i] > 0.4) {
+      Yeval[i] <- 1
+    }
+    else {
+      Yeval[i] <- 0
+    }
+  }
+}
+```
+
+```{r}
+#algo des k-NN (k plus proche voisins) (on prend le Y majoritaire parmis les k plus proches voisins)
+Xtest = sort(x)
+indices = order(x)
+
+
+#knn <- function(xi, k) {
+#  mini = 0
+#  maxi = 0
+#  for (i in 1:1000) {
+#    if (Xtest[i] < xi) {
+#      mini = i
+#    }
+#    if (Xtest[i] < xi & maxi == 0) {
+#      maxi = i
+#    }
+#  }
+#  for (i in 1:k) {
+#    d1 <- xi - Xtest[mini]
+#    d2 <- Xtest[maxi] - xi
+#  }
+#}
+
+library(mlbench)
+
+```
+
+```{r}
+data("Vehicle")
+summary(Vehicle)
+# 4 categories de vehicules, 18 variables d'intéret.
+```
+
+```{r}
+Vehicle$Skew.maxis <- NULL
+Vehicle$Skew.Maxis <- NULL
+Vehicle$Kurt.Maxis <- NULL
+Vehicle$Kurt.maxis <- NULL
+```
+
+```{r}
+# le cout utilisé est le nb de fois qu'il s'est trompé
+```
+
+```{r}
+#il faut normaliser/standardiser les variables d'intéret
+
+```
