@@ -1,0 +1,69 @@
+---
+title: "TP2"
+format: html
+---
+
+
+# TP2
+
+
+```{r}
+donnees <- read.csv("Donnees_qualite_vin.csv", sep = ";")
+summary(donnees)
+#les variables ne sont pas normalisées.
+#De plus, il semble que certaines variables soient corrélées (acidité et pH)
+```
+
+```{r}
+cor(donnees)
+#les quaracteristiques qui influencent le plus la qualité du vin sont l'alcohol, le volatile.acidity et le citric.acidity
+```
+
+```{r}
+library(class)
+library(dplyr)
+library(caTools)
+set.seed(2026)
+
+split = sample.split(donnees$quality, 
+                     SplitRatio = 0.75)
+train = subset(donnees, 
+                      split == TRUE)
+test = subset(donnees, 
+                  split == FALSE)
+train_scaled = train
+test_scaled = test
+for (i in 1:10) {
+  train_scaled[i] = scale(train_scaled[i])
+  test_scaled[i] = scale(test_scaled[i])
+}
+```
+
+```{r}
+#il faut stratifier pour s'assurer qu'il y ait assez d'indiv qui ont une bonne qualité dans train, test et eval.
+knn <- knn(train = train_scaled, test = test_scaled, cl = train_scaled$quality, k = 10)
+cm <- table(test_scaled$quality, knn)
+accuracy <- sum(diag(cm))/length(test_scaled$quality)
+accuracy
+#hyperparametres: le k qu'on prend, 
+```
+
+```{r}
+library(e1071)
+library(caret)
+
+classifier_cl <- naiveBayes(quality ~ ., data = train_scaled)
+#classifier_cl
+
+y_pred <- predict(classifier_cl, newdata = test_scaled)
+
+cm <- table(test_scaled$quality, y_pred)
+confusionMatrix(cm)
+```
+
+```{r}
+library(MASS)
+lda_model <- lda(quality ~ ., data = train_scaled)
+lda_model
+#hyperparametres: 
+```
