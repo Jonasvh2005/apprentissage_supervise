@@ -1,0 +1,38 @@
+---
+title: "TP3"
+format: html
+---
+
+```{r}
+donnees <- read.csv("Donnees_qualite_vins.csv", sep = ",")
+summary(donnees)
+```
+
+```{r}
+cor(donnees)
+#les quaracteristiques qui influencent le plus la qualité du vin sont l'alcohol, le volatile.acidity et les sulphates
+```
+
+```{r}
+library(class)
+library(dplyr)
+library(caTools)
+set.seed(2026)
+
+split = sample.split(donnees$quality, 
+                     SplitRatio = 0.75)
+train = subset(donnees, 
+                      split == TRUE)
+test = subset(donnees, 
+                  split == FALSE)
+train_scaled = train
+test_scaled = test
+for (i in 1:10) {
+  train_scaled[i] = scale(train_scaled[i])
+  test_scaled[i] = scale(test_scaled[i])
+}
+```
+
+```{r}
+
+```
